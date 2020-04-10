@@ -1,0 +1,7 @@
+pip install django
+pip install django-crispy-forms
+pip install pdfminer.six
+pip install doc2text
+pip install spacy
+python -m spacy download en_core_web_sm
+pip install pandas

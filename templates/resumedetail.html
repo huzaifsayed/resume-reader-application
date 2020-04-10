@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Resume Reader Application</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+	<div class="jumbotron text-center bg-primary">
+		<h1 class="text-light">Resume Reader Application</h1>
+		<p class="text-light">Upload Your Resume Here!</p>
+	</div>
+
+	<div class="container">
+		<div class="row">
+            <div class="col-sm-12">
+                <h2 class="text-center">Resume Details</h2>
+                <br>
+            </div>
+			<div class="col-sm-6">
+				<table class="table table-striped">
+                <tr>
+                    <th>Name:</th>
+                    <td>{{resume.name}}</td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td>{{resume.email}}</td>
+                </tr>
+                <tr>
+                    <th>Phone Number:</th>
+                    <td>{{resume.phone_number}}</td>
+                </tr>
+                <tr>
+                    <th>Linkedin URL:</th>
+                    <td>{{resume.linkedin_url}}</td>
+                </tr>
+                <tr>
+                    <th>Skills:</th>
+                    <td>{{resume.skills}}</td>
+                </tr>
+                <tr>
+                    <th>Education:</th>
+                    <td>{{resume.education}}</td>
+                </tr>
+                </table>
+            </div>
+            <div class="col-sm-6">
+				<table class="table table-striped">
+                <tr>
+                    <th>Total Lines:</th>
+                    <td>{{resume.total_lines}}</td>
+                </tr>
+                <tr>
+                    <th>Total Words:</th>
+                    <td>{{resume.total_words}}</td>
+                </tr>
+                <tr>
+                    <th>Total Characters:</th>
+                    <td>{{resume.total_char}}</td>
+                </tr>
+                <tr>
+                    <th>Font Name:</th>
+                    <td>{{resume.font_name}}</td>
+                </tr>
+                <tr>
+                    <th>Font Size:</th>
+                    <td>{{resume.font_size}}</td>
+                </tr>
+                <tr>
+                    <th>Total Images:</th>
+                    <td>{{resume.total_images}}</td>
+                </tr>
+                <tr>
+                    <th>Total Tables:</th>
+                    <td>{{resume.total_tables}}</td>
+                </tr>
+                </table>
+            </div>
+            <div class="col-sm-12 text-center">
+                <br>                
+                <a href="{% url 'homepage' %}" class="btn btn-success btn-sm" role="button">Home</a>
+                <a href="{% url 'resumelist' %}" class="btn btn-danger btn-sm" role="button">See Uploaded Resumes</a>
+            </div>
+		</div>
+	</div>
+
+
+	<script>
+		// Add the following code if you want the name of the file appear on select
+		$(".custom-file-input").on("change", function () {
+			var fileName = $(this).val().split("\\").pop();
+			$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+		});
+	</script>
+
+</body>
+
+</html>

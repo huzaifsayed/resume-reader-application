@@ -1,0 +1,60 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Resume Reader Application</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+	<div class="jumbotron text-center bg-primary">
+		<h1 class="text-light">Resume Reader Application</h1>
+		<p class="text-light">Upload Your Resume Here!</p>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<h2 class="text-center">Upload Resume</h2>
+				<br>
+				<form method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="custom-file form-group">
+						<input name="document" type="file" class="custom-file-input" id="customFile"
+							accept=".docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf">
+						<label class="custom-file-label" for="customFile">Upload Word or PDF File</label>
+					</div>
+					<br>
+					<br>
+					<div class="text-center">
+						<button type="submit" class="btn btn-success text-center">Upload</button>
+					</div>
+				</form>
+			</div>
+			<div class="col-sm-12 text-center">
+				<br>
+				<a href="{% url 'resumelist' %}" class="btn btn-danger btn-sm" role="button">See Uploaded Resumes</a>
+            </div>
+		</div>
+	</div>
+
+
+	<script>
+		// Add the following code if you want the name of the file appear on select
+		$(".custom-file-input").on("change", function () {
+			var fileName = $(this).val().split("\\").pop();
+			$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+		});
+	</script>
+
+</body>
+
+</html>
