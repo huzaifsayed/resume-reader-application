@@ -216,8 +216,8 @@ class CustomResumeParser:
             linkedin_url = extract_linkedin_url(text_docx)
             skills = extract_skills(text_docx)
             education = extract_education(text_docx)
-            skills_str = ', '.join(skills)
-            education_str = ', '.join(education)
+            skills_str = ', '.join(''.join(elems) for elems in skills)
+            education_str = ', '.join(''.join(elems) for elems in education)
 
             # Return in Dictionary Form - Docx.
             return {
@@ -246,8 +246,8 @@ class CustomResumeParser:
             linkedin_url = extract_linkedin_url(text_pdf)
             skills = extract_skills(text_pdf)
             education = extract_education(text_pdf)
-            skills_str = ', '.join(skills)
-            education_str = ', '.join(education)
+            skills_str = ', '.join(''.join(elems) for elems in skills)
+            education_str = ', '.join(''.join(elems) for elems in education)
 
             # Return in Dictionary Form - PDF.
             return {

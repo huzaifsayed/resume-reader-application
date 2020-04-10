@@ -1,7 +1,18 @@
 pip install django
 pip install django-crispy-forms
 pip install pdfminer.six
-pip install doc2text
+pip install docx2text
 pip install spacy
+
 python -m spacy download en_core_web_sm
+or 
+pip install .\library\en_core_web_sm-2.2.5.tar.gz
+
 pip install pandas
+pip install nltk
+python -m nltk nltk.download('words')
+pip install python-docx
+
+pip install PyPDF2
+
+pip install camelot-py
