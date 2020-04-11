@@ -54,7 +54,7 @@ class ResumeUploadView(TemplateView):
                 pdf_data = get_font_table_shape_from_pdf(file_path)
 
                 resume_obj.font_name = pdf_data.get('font_style') or 'File Empty'
-                resume_obj.font_size = '12, 24, 30'
+                resume_obj.font_size = pdf_data.get('font_size') or 'File Empty'
                 resume_obj.total_tables = 0
                 resume_obj.total_images = pdf_data.get('doc_shapes') 
             

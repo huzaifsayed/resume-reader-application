@@ -35,6 +35,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% if resumes %}
                         {% for resume in resumes %}
                         <tr>
                             <td>{{forloop.counter}}</td>
@@ -42,6 +43,7 @@
                             <td><a href="{% url 'resumedetail' resume.id %}" class="btn btn-success btn-sm" role="button">See Detail</a></td>
                         </tr>
                         {% endfor %}
+                        {% endif %}
                     </tbody>
                 </table>
             </div>

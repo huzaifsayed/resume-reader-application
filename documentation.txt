@@ -1,8 +1,9 @@
 pip install django
 pip install django-crispy-forms
 pip install pdfminer.six
-pip install docx2text
+pip install docx2txt
 pip install spacy
+pip install Pillow
 
 python -m spacy download en_core_web_sm
 or 
@@ -15,4 +16,4 @@ pip install python-docx
 
 pip install PyPDF2
 
-pip install camelot-py
+pip install beautifulsoup4

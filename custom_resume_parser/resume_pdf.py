@@ -1,12 +1,12 @@
 import PyPDF2
 from PIL import Image
-import camelot
-from pprint import pprint
 
 
 def get_font_table_shape_from_pdf(path):
 
     image_count = 0
+    fonts = set()
+    embedded = set()
 
     # Extracting Image Count using PyPDF2
     with open(path, 'rb') as pdf_file:
@@ -15,34 +15,29 @@ def get_font_table_shape_from_pdf(path):
 
         # Extracting Images
         for i in range(0, cond_scan_reader.getNumPages()):
-            page0 = cond_scan_reader.getPage(i)
-            if '/XObject' in page0['/Resources']:
-                xObject = page0['/Resources']['/XObject'].getObject()
+            page = cond_scan_reader.getPage(i)
+            if '/XObject' in page['/Resources']:
+                xObject = page['/Resources']['/XObject'].getObject()
                 for obj in xObject:
                     if xObject[obj]['/Subtype'] == '/Image':
                         image_count +=1
-            else:
-                print("No image found.")
 
-    print(image_count)
-
-    pdf = PyPDF2.PdfFileReader(path)
-    fonts = set()
-    embedded = set()
-    for page in pdf.pages:
-        obj = page.getObject()
-        f, e = walk(obj['/Resources'], fonts, embedded)
-        fonts = fonts.union(f)
-        embedded = embedded.union(e)
+        # Extracting Font
+        for page in pdf_reader.pages:
+            obj = page.getObject()
+            f, e = walk(obj['/Resources'], fonts, embedded)
+            fonts = fonts.union(f)
+            embedded = embedded.union(e)
 
     unembedded = fonts - embedded
     clean_fonts = [remove_cruft(s) for s in fonts]
     font_style = ', '.join(sorted(list(clean_fonts)))
-    print(fonts)
+    
+    font_size = pdf_to_html(path)
 
     return {
                 'font_style': font_style, 
-                # 'font_size': font_size, 
+                'font_size': ', '.join(font_size), 
                 # 'doc_table': len(document.tables),
                 'doc_shapes': image_count,
             }
@@ -64,3 +59,73 @@ def walk(obj, fnt, emb):
         walk(obj[k], fnt, emb)
 
     return fnt, emb
+
+
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.converter import TextConverter, HTMLConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfpage import PDFPage
+from io import BytesIO
+
+def pdf_to_html(path):
+    manager = PDFResourceManager()
+    retstr = BytesIO()
+    layout = LAParams(all_texts=True)
+    device = HTMLConverter(manager, retstr, laparams=layout)
+    filepath = open(path, 'rb')
+    interpreter = PDFPageInterpreter(manager, device)
+
+    for page in PDFPage.get_pages(filepath, check_extractable=True):
+        interpreter.process_page(page)
+
+    text = retstr.getvalue()
+
+    filepath.close()
+    device.close()
+    retstr.close()
+    return text
+
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.converter import TextConverter, HTMLConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfpage import PDFPage
+from io import BytesIO
+
+def pdf_to_html(path):
+    manager = PDFResourceManager()
+    retstr = BytesIO()
+    layout = LAParams(all_texts=True)
+    device = HTMLConverter(manager, retstr, laparams=layout)
+    filepath = open(path, 'rb')
+    interpreter = PDFPageInterpreter(manager, device)
+
+    for page in PDFPage.get_pages(filepath, check_extractable=True):
+        interpreter.process_page(page)
+
+    text = retstr.getvalue()
+
+    filepath.close()
+    device.close()
+    retstr.close()
+
+    # Write HTML String to file.html
+    # f = open("demofile3.html", "wb")
+    # f.write(text)
+    # f.close()
+
+    font_size = extract_font_table(text)
+
+    return font_size
+
+
+def extract_font_table(htmlData):
+    from bs4 import BeautifulSoup
+    import re
+    soup = BeautifulSoup(htmlData)
+    font_spans = [ data for data in soup.select('span') if 'font-size' in str(data) ]
+    font_set = set()
+    for i in font_spans:
+        fonts_size = re.search(r'(?is)(font-size:)(.*?)(px)',str(i.get('style'))).group(2)
+        font_set.add(fonts_size)
+    return list(font_set)
+
